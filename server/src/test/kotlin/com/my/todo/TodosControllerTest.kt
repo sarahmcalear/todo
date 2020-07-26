@@ -10,8 +10,10 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.util.*
 
 @WebMvcTest
 @ContextConfiguration(classes = [TodosController::class, TestConfig::class])
@@ -50,12 +52,47 @@ class TodosControllerTest {
         )
                 .andExpect(status().isCreated)
                 .andExpect(content().json(expectedResponse))
+    }
 
+    @Test
+    fun getTodo() {
+        val id = UUID.randomUUID()
+        val title = "Title"
+        val description = "Description"
+
+        val expectedResponse = """
+            {
+                "id": "$id",
+                "title": "$title",
+                "description": "$description"
+            }
+        """.trimIndent()
+
+        val expectedTodo = Todo(id = id, title = title, description = description)
+
+        mockTodoService.setResponse(expectedTodo)
+
+        mockMvc.perform(
+                get("/api/todos/${id}")
+                        .accept(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isOk)
+                .andExpect(content().json(expectedResponse))
     }
 
     class MockTodoService: TodoService {
+        private lateinit var responseToBeReturned: Todo
+
         override fun createTodo(todo: Todo): Todo {
             return todo;
+        }
+
+        override fun getTodo(id: String): Todo {
+            return responseToBeReturned
+        }
+
+        fun setResponse(todo: Todo) {
+            responseToBeReturned = todo
         }
     }
 }

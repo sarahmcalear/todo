@@ -1,5 +1,6 @@
 package com.my.todo
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,5 +27,17 @@ class DefaultTodoRepositoryTest {
         val todo = Todo(title = "title", description = "description")
 
         todoRepository.save(todo)
+    }
+
+    @Test
+    fun get() {
+        val todo = Todo(title = "title", description = "description")
+
+        val savedTodo = todoRepository.save(todo)
+
+        val returnedTodo = todoRepository.get(savedTodo.id.toString())
+
+        assertEquals(todo.title, returnedTodo.title)
+        assertEquals(todo.description, returnedTodo.description)
     }
 }

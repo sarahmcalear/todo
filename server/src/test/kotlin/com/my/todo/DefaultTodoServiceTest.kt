@@ -37,4 +37,18 @@ class DefaultTodoServiceTest {
 
         assertEquals(expectedTodo, actualTodo)
     }
+
+    @Test
+    fun `get todo`() {
+        val uuid = UUID.randomUUID()
+        val id = uuid.toString()
+
+        val expectedTodo = Todo(id = uuid, title = "title", description = "description")
+
+        `when`(repository.get(id)).thenReturn(expectedTodo)
+
+        val actualTodo = todoService.getTodo(id)
+
+        assertEquals(expectedTodo, actualTodo)
+    }
 }

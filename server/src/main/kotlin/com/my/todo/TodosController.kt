@@ -1,16 +1,18 @@
 package com.my.todo
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/todos")
 class TodosController(private val service: TodoService) {
+
+    @GetMapping("/{id}")
+    fun getTodo( @PathVariable id: String): ResponseEntity<Todo> {
+        val todo = service.getTodo(id)
+        return ResponseEntity(todo, HttpStatus.OK)
+    }
 
     @PostMapping
     fun createTodo(@RequestBody request: Todo): ResponseEntity<Todo> {
