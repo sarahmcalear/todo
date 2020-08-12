@@ -22,8 +22,13 @@ build/
 # web testing
 /web/coverage
 
+# cypress
+/web/cypress/videos
+/web/cypress/screenshots
+
 # web production
 /web/build
+/web/build_packageWebApp
 
 # web misc
 /web/.DS_Store

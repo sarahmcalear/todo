@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-function set_bash_fail_on_error() {
-  set -o errexit
-  set -o errtrace
-  set -o nounset
-  set -o pipefail
-}
-
 function go_to_root_directory() {
     root_directory=$(git rev-parse --show-toplevel)
     echo "root directory:"
@@ -20,6 +13,10 @@ function purge_db() {
 
 function main() {
   go_to_root_directory
+
+  source ./scripts/common.sh || exit 1
+  common.set_bash_fail_on_error
+
   purge_db
 }
 

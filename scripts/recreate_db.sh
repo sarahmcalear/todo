@@ -1,17 +1,10 @@
 #!/usr/bin/env bash
 
-function set_bash_fail_on_error() {
-  set -o errexit
-  set -o errtrace
-  set -o nounset
-  set -o pipefail
-}
-
 function go_to_root_directory() {
     root_directory=$(git rev-parse --show-toplevel)
     echo "root directory:"
     echo root_directory
-    cd "$root_directory"
+    cd "$root_directory" || exit 1
 }
 
 function destroy_docker() {
@@ -35,8 +28,11 @@ function rebuild_db() {
 }
 
 function main() {
-  set_bash_fail_on_error
   go_to_root_directory
+
+  source ./scripts/common.sh || exit 1
+  common.set_bash_fail_on_error
+
   destroy_docker
   run_docker
   rebuild_db
