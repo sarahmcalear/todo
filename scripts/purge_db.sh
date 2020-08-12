@@ -18,7 +18,7 @@ function purge_db() {
     PGPASSWORD=$DB_PASSWORD psql -h localhost -U postgres todo -f scripts/purge_database.sql
 }
 
-function purge_db() {
+function main() {
   go_to_root_directory
   purge_db
 }

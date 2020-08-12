@@ -23,19 +23,19 @@ node {
     download = true
 }
 
-tasks.named<YarnTask>("yarn_run-build") {
+tasks.named<YarnTask>("yarn_run_build") {
     inputs.files(fileTree("public"))
     inputs.files(fileTree("src"))
 
-    inputs.files(fileTree("package.json"))
-    inputs.files(fileTree("package-lock.json"))
+    inputs.file("package.json")
+    inputs.file("yarn.lock")
 
-    inputs.files(fileTree("build"))
+    outputs.dir("build")
 }
 
 val packageWebApp by tasks.registering(Jar::class) {
-    dependsOn("yarn_run_lint")
-    dependsOn("yarn_run_lint")
+//    dependsOn("yarn_run_lint")
+    dependsOn("yarn_run_build")
     baseName = "web"
     extension = "jar"
     destinationDir = file("${projectDir}/build_packageWebApp")
@@ -67,7 +67,7 @@ val test by tasks.registering(YarnTask::class) {
 
     inputs.files(fileTree("src"))
     inputs.file("package.json")
-    inputs.file("package-lock.json")
+    inputs.file("yarn.lock")
 }
 
 tasks.check {
